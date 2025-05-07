@@ -165,11 +165,10 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 					.history-item:hover {
 						background-color: var(--vscode-list-hoverBackground);
 					}
-					/*.bookmark-button, .delete-button, .export-button {
+					.delete-button, .export-button {
 						opacity: 0;
 						pointer-events: none;
 					}
-						*/
 					.history-item:hover .bookmark-button,
 					.history-item:hover .delete-button,
 					.history-item:hover .export-button {
@@ -339,16 +338,21 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 											justifyContent: "space-between",
 											alignItems: "center",
 										}}>
-										<span
+										<div
 											style={{
-												color: "var(--vscode-descriptionForeground)",
-												fontWeight: 500,
-												fontSize: "0.85em",
-												textTransform: "uppercase",
+												display: "flex",
+												alignItems: "center",
+												gap: "4px",
 											}}>
-											{formatDate(item.ts)}
-										</span>
-										<div>
+											<span
+												style={{
+													color: "var(--vscode-descriptionForeground)",
+													fontWeight: 500,
+													fontSize: "0.85em",
+													textTransform: "uppercase",
+												}}>
+												{formatDate(item.ts)}
+											</span>
 											<VSCodeButton
 												appearance="icon"
 												onClick={(e) => {
@@ -359,6 +363,8 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 												style={{ padding: "0px 0px" }}>
 												<BookmarkIcon isSet={item.bookmarked} />
 											</VSCodeButton>
+										</div>
+										<div>
 											<VSCodeButton
 												appearance="icon"
 												onClick={(e) => {
