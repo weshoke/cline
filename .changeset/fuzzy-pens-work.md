@@ -1,5 +1,5 @@
 ---
-"claude-dev": patch
+"claude-dev": minor
 ---
 
 Add task history bookmark button
