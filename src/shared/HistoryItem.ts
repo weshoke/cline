@@ -7,6 +7,7 @@ export type HistoryItem = {
 	cacheWrites?: number
 	cacheReads?: number
 	totalCost: number
+	bookmarked?: boolean
 
 	size?: number
 	shadowGitConfigWorkTree?: string

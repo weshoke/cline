@@ -1571,6 +1571,15 @@ Here is the project's README to help you get started:\n\n${mcpDetails.readmeCont
 			})
 	}
 
+	async bookmarkTaskWithId(id: string) {
+		console.info("bookmarkTaskWithId: ", id)
+
+		const { historyItem } = await this.getTaskWithId(id)
+		historyItem.bookmarked = !historyItem.bookmarked
+		await this.updateTaskHistory(historyItem)
+		await this.postStateToWebview()
+	}
+
 	async deleteTaskWithId(id: string) {
 		console.info("deleteTaskWithId: ", id)
 

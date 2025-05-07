@@ -10,12 +10,13 @@ import { formatSize } from "@/utils/format"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { useEvent } from "react-use"
 import DangerButton from "@/components/common/DangerButton"
+import { BookmarkIcon } from "./Bookmark"
 
 type HistoryViewProps = {
 	onDone: () => void
 }
 
-type SortOption = "newest" | "oldest" | "mostExpensive" | "mostTokens" | "mostRelevant"
+type SortOption = "newest" | "oldest" | "mostExpensive" | "mostTokens" | "mostRelevant" | "bookmarked"
 
 const HistoryView = ({ onDone }: HistoryViewProps) => {
 	const { taskHistory, totalTasksSize } = useExtensionState()
@@ -59,6 +60,10 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 				return prev.filter((id) => id !== itemId)
 			}
 		})
+	}, [])
+
+	const handleBookmarkHistoryItem = useCallback((id: string) => {
+		TaskServiceClient.bookmarkTasksWithIds({ value: [id] })
 	}, [])
 
 	const handleDeleteHistoryItem = useCallback((id: string) => {
@@ -123,6 +128,8 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 				case "mostRelevant":
 					// NOTE: you must never sort directly on object since it will cause members to be reordered
 					return searchQuery ? 0 : b.ts - a.ts // Keep fuse order if searching, otherwise sort by newest
+				case "bookmarked":
+					return b.bookmarked ? 1 : a.bookmarked ? -1 : b.ts - a.ts
 				case "newest":
 				default:
 					return b.ts - a.ts
@@ -131,6 +138,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 
 		return results
 	}, [presentableTasks, searchQuery, fuse, sortOption])
+	console.log("taskHistorySearchResults", taskHistorySearchResults)
 
 	// Calculate total size of selected items
 	const selectedItemsSize = useMemo(() => {
@@ -157,10 +165,12 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 					.history-item:hover {
 						background-color: var(--vscode-list-hoverBackground);
 					}
-					.delete-button, .export-button {
+					/*.bookmark-button, .delete-button, .export-button {
 						opacity: 0;
 						pointer-events: none;
 					}
+						*/
+					.history-item:hover .bookmark-button,
 					.history-item:hover .delete-button,
 					.history-item:hover .export-button {
 						opacity: 1;
@@ -252,6 +262,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 							<VSCodeRadio value="mostRelevant" disabled={!searchQuery} style={{ opacity: searchQuery ? 1 : 0.5 }}>
 								Most Relevant
 							</VSCodeRadio>
+							<VSCodeRadio value="bookmarked">Bookmarked</VSCodeRadio>
 						</VSCodeRadioGroup>
 						<div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
 							<VSCodeButton
@@ -337,26 +348,38 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 											}}>
 											{formatDate(item.ts)}
 										</span>
-										<VSCodeButton
-											appearance="icon"
-											onClick={(e) => {
-												e.stopPropagation()
-												handleDeleteHistoryItem(item.id)
-											}}
-											className="delete-button"
-											style={{ padding: "0px 0px" }}>
-											<div
-												style={{
-													display: "flex",
-													alignItems: "center",
-													gap: "3px",
-													fontSize: "11px",
-													// fontWeight: "bold",
-												}}>
-												<span className="codicon codicon-trash"></span>
-												{formatSize(item.size)}
-											</div>
-										</VSCodeButton>
+										<div>
+											<VSCodeButton
+												appearance="icon"
+												onClick={(e) => {
+													e.stopPropagation()
+													handleBookmarkHistoryItem(item.id)
+												}}
+												className="bookmark-button"
+												style={{ padding: "0px 0px" }}>
+												<BookmarkIcon isSet={item.bookmarked} />
+											</VSCodeButton>
+											<VSCodeButton
+												appearance="icon"
+												onClick={(e) => {
+													e.stopPropagation()
+													handleDeleteHistoryItem(item.id)
+												}}
+												className="delete-button"
+												style={{ padding: "0px 0px" }}>
+												<div
+													style={{
+														display: "flex",
+														alignItems: "center",
+														gap: "3px",
+														fontSize: "11px",
+														// fontWeight: "bold",
+													}}>
+													<span className="codicon codicon-trash"></span>
+													{formatSize(item.size)}
+												</div>
+											</VSCodeButton>
+										</div>
 									</div>
 									<div
 										style={{

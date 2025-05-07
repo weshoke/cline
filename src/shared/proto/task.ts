@@ -133,6 +133,15 @@ export const TaskServiceDefinition = {
 			responseStream: false,
 			options: {},
 		},
+		/** Bookmark multiple tasks with the given IDs */
+		bookmarkTasksWithIds: {
+			name: "bookmarkTasksWithIds",
+			requestType: StringArrayRequest,
+			requestStream: false,
+			responseType: Empty,
+			responseStream: false,
+			options: {},
+		},
 		/** Deletes multiple tasks with the given IDs */
 		deleteTasksWithIds: {
 			name: "deleteTasksWithIds",
