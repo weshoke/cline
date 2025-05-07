@@ -138,7 +138,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 
 		return results
 	}, [presentableTasks, searchQuery, fuse, sortOption])
-	console.log("taskHistorySearchResults", taskHistorySearchResults)
 
 	// Calculate total size of selected items
 	const selectedItemsSize = useMemo(() => {
