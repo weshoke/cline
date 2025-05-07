@@ -364,28 +364,26 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 												<BookmarkIcon isSet={item.bookmarked} />
 											</VSCodeButton>
 										</div>
-										<div>
-											<VSCodeButton
-												appearance="icon"
-												onClick={(e) => {
-													e.stopPropagation()
-													handleDeleteHistoryItem(item.id)
-												}}
-												className="delete-button"
-												style={{ padding: "0px 0px" }}>
-												<div
-													style={{
-														display: "flex",
-														alignItems: "center",
-														gap: "3px",
-														fontSize: "11px",
-														// fontWeight: "bold",
-													}}>
-													<span className="codicon codicon-trash"></span>
-													{formatSize(item.size)}
-												</div>
-											</VSCodeButton>
-										</div>
+										<VSCodeButton
+											appearance="icon"
+											onClick={(e) => {
+												e.stopPropagation()
+												handleDeleteHistoryItem(item.id)
+											}}
+											className="delete-button"
+											style={{ padding: "0px 0px" }}>
+											<div
+												style={{
+													display: "flex",
+													alignItems: "center",
+													gap: "3px",
+													fontSize: "11px",
+													// fontWeight: "bold",
+												}}>
+												<span className="codicon codicon-trash"></span>
+												{formatSize(item.size)}
+											</div>
+										</VSCodeButton>
 									</div>
 									<div
 										style={{
